@@ -1,8 +1,7 @@
-const readline = require('readline');
-const data = require('./data.js');
+const readline = require('readline')
+const data = require('./data.js')
+const todos = data.todos
 
-
-const todos = data.todos;
 
 const interface = readline.createInterface({
   input: process.stdin,
@@ -19,55 +18,69 @@ Your options are:
 5. Toggle a todo's priority.
 6. Quit.
 
-`;
+`
 
-const add = function(userInput) {
-  const todo = {
-    text: userInput,
-    isComplete: false,
-    priority: 2,
+const remove = (selection) => {
+  console.log(selection)
+  todos.splice(Number(selection) - 1, 1)
+  toDoList()
+  interface.question(menu, select)
+}
+const toDoList = () => {
+  console.clear()
+  console.log(`Here are your todo's:\n`)
+  for (let i = 0; i < todos.length; i++) {
+    console.log(i + 1 + '. ' + todos[i].text)
   }
-
-  todos.unshift(todo);
-  console.clear();
-  console.log('Your todos are:')
-  for (const todo of todos) {
-    console.log('* ' + todo.text);
-  }
-
-  interface.question(menu, handleMenu);
 }
 
-const handleMenu = function(cmd) {
-  if (cmd === '1') {
-    console.clear();
-    interface.question('What todo would you like to add?\n\n', add);
-  } else if (cmd === '2') {
-    console.clear();
-    console.log(`Feature ${cmd} is still under construction. Sorry!`);
-    interface.question(menu, handleMenu);
-  } else if (cmd === '3') {
-    console.clear();
-    console.log(`Feature ${cmd} is still under construction. Sorry!`);
-    interface.question(menu, handleMenu);
-  } else if (cmd === '4') {
-    console.clear();
-    console.log(`Feature ${cmd} is still under construction. Sorry!`);
-    interface.question(menu, handleMenu);
-  } else if (cmd === '5') {
-    console.clear();
-    console.log(`Feature ${cmd} is still under construction. Sorry!`);
-    interface.question(menu, handleMenu);
-  } else {
-    console.log('Quitting!');
-    interface.close();
+
+const add = (userInput) => {
+  const obj = {}
+  obj.text = userInput;
+  obj.isComplete = false;
+  obj.priority = 2;
+  todos.push(obj)
+  toDoList(obj)
+  interface.question(menu, select)
+}
+
+
+const select = (userInput) => {
+  switch (userInput) {
+
+    case '1':
+      console.clear()
+      toDoList()
+      interface.question(`\nWhat should go on your todo list?\n`, add)
+      break;
+
+    case '2':
+      console.clear()
+      toDoList()
+      interface.question(`\nWhich todo would you like to remove?\n`, remove)
+      break;
+
+    case '3':2
+      console.log(`This feature is under construction. Check back later!`)
+      interface.question(menu, select)
+      break;
+
+    case '4':
+      console.log(`This feature is under construction. Check back later!`)
+      interface.question(menu, select)
+      break;
+
+    case '5':
+      console.log(`This feature is under construction. Check back later!`)
+      interface.question(menu, select)
+      break;
+
+    case '6':
+      console.log(`Quitting!`)
+      interface.close()
+      break;
   }
 };
-
-console.clear();
-console.log('Your todos are:')
-for (const todo of todos) {
-  console.log('* ' + todo.text);
-}
-
-interface.question(menu, handleMenu);
+toDoList()
+interface.question(menu, select)
